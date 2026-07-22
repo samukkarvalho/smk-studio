@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMK Studio — Video Editor</title>
+<style>
+  :root{
+    --bg:#05050b; --card:#0d0d18; --border:#23233f; --border2:#1c1c30;
+    --text:#eceaf7; --muted:#8b8ba0; --muted2:#a3a3b8;
+    --purple:#7f5af0; --cyan:#00e5ff; --amber:#f0a84a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; line-height:1.5;}
+  a{color:inherit;}
+  .container{max-width:960px; margin:0 auto; padding:0 24px;}
+  [data-en]{}
+  html[data-lang="pt"] [data-en][data-pt]{}
+
+  nav{position:sticky; top:0; z-index:10; display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:rgba(5,5,11,0.9); border-bottom:1px solid var(--border2); backdrop-filter:blur(6px);}
+  .logo{font-weight:600; font-size:18px; letter-spacing:0.5px;}
+  .logo span{color:var(--purple); text-shadow:0 0 12px rgba(127,90,240,0.5);}
+  .nav-right{display:flex; align-items:center; gap:16px;}
+  .nav-right span{font-size:13px; color:var(--muted2);}
+  #langBtn{background:transparent; border:1px solid #3d3d5c; color:#cfc9f7; font-size:12px; padding:6px 12px; border-radius:6px; cursor:pointer;}
+
+  .hero{position:relative; padding:72px 24px 60px; text-align:center; overflow:hidden;}
+  .hero::before{content:""; position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:500px; height:320px; background:radial-gradient(ellipse,rgba(124,58,237,0.35),transparent 70%); filter:blur(20px); pointer-events:none;}
+  .hero-inner{position:relative; max-width:520px; margin:0 auto;}
+  .eyebrow{color:var(--cyan); font-size:12px; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px;}
+  h1{font-size:32px; font-weight:600; margin-bottom:18px; line-height:1.25;}
+  .hero p.sub{font-size:15px; color:var(--muted2); margin-bottom:28px;}
+  .btn-row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
+  .btn-primary{background:linear-gradient(135deg,var(--purple),var(--cyan)); color:var(--bg); border:none; font-size:14px; font-weight:600; padding:13px 24px; border-radius:8px; cursor:pointer; box-shadow:0 0 24px rgba(127,90,240,0.5); text-decoration:none; display:inline-block;}
+  .btn-outline{background:transparent; color:var(--text); border:1px solid #3d3d5c; font-size:14px; font-weight:500; padding:13px 24px; border-radius:8px; cursor:pointer; text-decoration:none; display:inline-block;}
+
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);}
+  .stat{padding:20px; text-align:center; border-right:1px solid var(--border2);}
+  .stat:last-child{border-right:none;}
+  .stat .num{font-size:22px; font-weight:600; color:var(--purple);}
+  .stat:nth-child(2) .num{color:var(--cyan);}
+  .stat .label{font-size:11px; color:var(--muted); margin-top:4px;}
+
+  section{padding:48px 24px 8px;}
+  .section-title{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px;}
+  .section-title p.tag{font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--cyan);}
+  .section-title p.hint{font-size:11px; color:#6b6b85;}
+
+  .video-feature{background:var(--card); border:1px solid var(--border); border-radius:12px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer;}
+  .play-btn{width:56px; height:56px; border-radius:50%; background:rgba(127,90,240,0.15); border:1px solid var(--purple); display:flex; align-items:center; justify-content:center; box-shadow:0 0 20px rgba(127,90,240,0.35);}
+  .play-btn.small{width:40px; height:40px;}
+  .play-btn svg{width:20px; height:20px; fill:#c9c3f7;}
+  .video-label{position:absolute; bottom:12px; left:14px; font-size:11px; color:var(--muted);}
+
+  .grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:12px;}
+  .grid-4{display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:10px;}
+  .thumb{background:var(--card); border:1px solid var(--border); border-radius:8px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+  .thumb.vert{aspect-ratio:9/16; border-radius:10px;}
+
+  .reviews-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
+  .review-card{background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px;}
+  .stars{color:var(--amber); font-size:14px; margin-bottom:10px; letter-spacing:2px;}
+  .review-card p.quote{font-size:13px; color:#c3c3d6; margin-bottom:10px;}
+  .review-card p.author{font-size:11px; color:#6b6b85;}
+
+  .about-row{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;}
+  .avatar{width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--cyan)); flex-shrink:0; box-shadow:0 0 20px rgba(127,90,240,0.4);}
+  .about-text p{font-size:14px; color:#c3c3d6; margin-bottom:12px;}
+
+  .pricing-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:8px;}
+  .price-card{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; position:relative;}
+  .price-card.featured{border:2px solid var(--purple); box-shadow:0 0 24px rgba(127,90,240,0.25);}
+  .badge{position:absolute; top:-11px; left:22px; background:var(--purple); color:var(--bg); font-size:11px; font-weight:600; padding:3px 10px; border-radius:6px;}
+  .price-card h3{font-size:15px; font-weight:600; margin-bottom:4px;}
+  .price-card .plan-desc{font-size:12px; color:var(--muted); margin-bottom:16px;}
+  .price-card .price{font-size:26px; font-weight:600; margin-bottom:16px; color:var(--purple);}
+  .price-card.featured .price{color:var(--cyan);}
+  .price-card .price span{font-size:12px; color:var(--muted); font-weight:400;}
+  .price-card ul{list-style:none; font-size:12px; color:#c3c3d6; line-height:2; margin-bottom:18px;}
+  .price-card .btn-outline, .price-card .btn-primary{width:100%; text-align:center; padding:11px;}
+
+  .cta{position:relative; padding:56px 24px 56px; text-align:center; border-top:1px solid var(--border2); margin-top:36px; overflow:hidden;}
+  .cta::before{content:""; position:absolute; bottom:-70px; left:50%; transform:translateX(-50%); width:420px; height:220px; background:radial-gradient(ellipse,rgba(0,229,255,0.2),transparent 70%); filter:blur(15px);}
+  .cta h2{position:relative; font-size:19px; font-weight:600; margin-bottom:20px;}
+  .cta .btn-row{position:relative;}
+  .contact-btn{display:inline-flex; align-items:center; gap:7px; font-size:14px; padding:12px 20px; border-radius:8px; text-decoration:none;}
+  .whatsapp{background:#1f7a4d; color:#eafff2;}
+  .email{background:transparent; border:1px solid #3d3d5c; color:var(--text);}
+
+  footer{text-align:center; padding:24px; font-size:12px; color:#6b6b85; border-top:1px solid var(--border2);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">SMK <span>STUDIO</span></div>
+  <div class="nav-right">
+    <span>Work</span><span>Reviews</span>
+    <button id="langBtn">PT</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow" data-en="Video editor · Porto, Portugal" data-pt="Editor de vídeo · Porto, Portugal">Video editor · Porto, Portugal</p>
+    <h1 data-en="Frame by frame, built to keep you watching" data-pt="Quadro a quadro, feito para prender sua atenção">Frame by frame, built to keep you watching</h1>
+    <p class="sub" data-en="Long-form storytelling and scroll-stopping shorts for brands and creators." data-pt="Narrativas em vídeos longos e shorts que prendem o público, para marcas e criadores.">Long-form storytelling and scroll-stopping shorts for brands and creators.</p>
+    <div class="btn-row">
+      <a href="#work" class="btn-primary" data-en="Watch showreel" data-pt="Ver showreel">Watch showreel</a>
+      <a href="#contact" class="btn-outline" data-en="Start a project" data-pt="Começar um projeto">Start a project</a>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="num">120+</div><div class="label" data-en="Projects delivered" data-pt="Projetos entregues">Projects delivered</div></div>
+  <div class="stat"><div class="num">4.9/5</div><div class="label" data-en="Average rating" data-pt="Avaliação média">Average rating</div></div>
+  <div class="stat"><div class="num">48h</div><div class="label" data-en="Typical turnaround" data-pt="Prazo típico">Typical turnaround</div></div>
+</div>
+
+<div class="container">
+  <section id="work">
+    <div class="section-title">
+      <p class="tag" data-en="Featured work" data-pt="Trabalho em destaque">Featured work</p>
+      <p class="hint" data-en="Long form" data-pt="Vídeos longos">Long form</p>
+    </div>
+    <div class="video-feature">
+      <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <span class="video-label" data-en="Brand campaign · 3:24" data-pt="Campanha de marca · 3:24">Brand campaign · 3:24</span>
+    </div>
+    <div class="grid-2">
+      <div class="thumb"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="thumb"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="tag" data-en="Shorts & reels" data-pt="Shorts e reels" style="margin-bottom:16px;">Shorts & reels</p>
+    <div class="grid-4">
+      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <p class="tag" data-en="What clients say" data-pt="O que os clientes dizem" style="margin-bottom:16px;">What clients say</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote" data-en="Turnaround was fast and the pacing matched our brand perfectly." data-pt="Entrega rápida e o ritmo combinou perfeitamente com nossa marca.">Turnaround was fast and the pacing matched our brand perfectly.</p>
+        <p class="author">— Marta, brand manager</p>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote" data-en="Creative ideas we hadn't even considered, and great communication." data-pt="Ideias criativas que nem tínhamos pensado, e ótima comunicação.">Creative ideas we hadn't even considered, and great communication.</p>
+        <p class="author">— Diego, content creator</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <p class="tag" data-en="About" data-pt="Sobre" style="margin-bottom:16px;">About</p>
+    <div class="about-row">
+      <div class="avatar"></div>
+      <div class="about-text">
+        <p data-en="Hi, I'm S.A. Souza — a video editor based in Porto, Portugal, working with brands and creators worldwide." data-pt="Olá, sou S.A. Souza — editor de vídeo em Porto, Portugal, trabalhando com marcas e criadores no mundo todo.">Hi, I'm S.A. Souza — a video editor based in Porto, Portugal, working with brands and creators worldwide.</p>
+        <p data-en="I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll." data-pt="Foco em edições rápidas e limpas, com ritmo moderno — de narrativas longas a conteúdos curtos feitos para prender a atenção.">I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <p class="tag" data-en="Packages" data-pt="Pacotes" style="margin-bottom:16px;">Packages</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3 data-en="Short form" data-pt="Vídeo curto">Short form</h3>
+        <p class="plan-desc" data-en="Reels, shorts, TikTok" data-pt="Reels, shorts, TikTok">Reels, shorts, TikTok</p>
+        <p class="price">€30<span data-en="/video" data-pt="/vídeo">/video</span></p>
+        <ul>
+          <li data-en="Up to 60s" data-pt="Até 60s">Up to 60s</li>
+          <li data-en="Captions + sound design" data-pt="Legendas + design de som">Captions + sound design</li>
+          <li data-en="2 revisions" data-pt="2 revisões">2 revisions</li>
+        </ul>
+        <a href="#contact" class="btn-outline" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
+      </div>
+      <div class="price-card featured">
+        <span class="badge" data-en="Most popular" data-pt="Mais popular">Most popular</span>
+        <h3 data-en="Long form" data-pt="Vídeo longo">Long form</h3>
+        <p class="plan-desc" data-en="YouTube, campaigns" data-pt="YouTube, campanhas">YouTube, campaigns</p>
+        <p class="price">€120<span data-en="/video" data-pt="/vídeo">/video</span></p>
+        <ul>
+          <li data-en="Up to 10 min" data-pt="Até 10 min">Up to 10 min</li>
+          <li data-en="Color grading + motion graphics" data-pt="Correção de cor + motion graphics">Color grading + motion graphics</li>
+          <li data-en="3 revisions" data-pt="3 revisões">3 revisions</li>
+        </ul>
+        <a href="#contact" class="btn-primary" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
+      </div>
+      <div class="price-card">
+        <h3 data-en="Monthly retainer" data-pt="Pacote mensal">Monthly retainer</h3>
+        <p class="plan-desc" data-en="Ongoing content" data-pt="Conteúdo contínuo">Ongoing content</p>
+        <p class="price">€450<span data-en="/month" data-pt="/mês">/month</span></p>
+        <ul>
+          <li data-en="4 long + 8 short videos" data-pt="4 longos + 8 curtos">4 long + 8 short videos</li>
+          <li data-en="Priority turnaround" data-pt="Entrega prioritária">Priority turnaround</li>
+          <li data-en="Unlimited revisions" data-pt="Revisões ilimitadas">Unlimited revisions</li>
+        </ul>
+        <a href="#contact" class="btn-outline" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="cta" id="contact">
+  <h2 data-en="Ready to make your next video?" data-pt="Pronto para criar seu próximo vídeo?">Ready to make your next video?</h2>
+  <div class="btn-row">
+    <a href="https://wa.me/351962279674" class="contact-btn whatsapp" target="_blank">WhatsApp</a>
+    <a href="mailto:saasouzaplay@gmail.com" class="contact-btn email">Email</a>
+  </div>
+</div>
+
+<footer>© 2026 SMK Studio. All rights reserved.</footer>
+
+<script>
+  const langBtn = document.getElementById('langBtn');
+  let isPt = false;
+  langBtn.addEventListener('click', () => {
+    isPt = !isPt;
+    document.documentElement.setAttribute('data-lang', isPt ? 'pt' : 'en');
+    langBtn.textContent = isPt ? 'EN' : 'PT';
+    document.querySelectorAll('[data-en][data-pt]').forEach(el => {
+      el.textContent = isPt ? el.getAttribute('data-pt') : el.getAttribute('data-en');
+    });
+  });
+</script>
+</body>
+</html>
