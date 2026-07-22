@@ -14,8 +14,6 @@
   body{background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; line-height:1.5;}
   a{color:inherit;}
   .container{max-width:960px; margin:0 auto; padding:0 24px;}
-  [data-en]{}
-  html[data-lang="pt"] [data-en][data-pt]{}
 
   nav{position:sticky; top:0; z-index:10; display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:rgba(5,5,11,0.9); border-bottom:1px solid var(--border2); backdrop-filter:blur(6px);}
   .logo{font-weight:600; font-size:18px; letter-spacing:0.5px;}
@@ -64,7 +62,7 @@
   .review-card p.author{font-size:11px; color:#6b6b85;}
 
   .about-row{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;}
-  .avatar{width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--cyan)); flex-shrink:0; box-shadow:0 0 20px rgba(127,90,240,0.4);}
+  .avatar-img{width:64px; height:64px; border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 0 20px rgba(127,90,240,0.4);}
   .about-text p{font-size:14px; color:#c3c3d6; margin-bottom:12px;}
 
   .pricing-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:8px;}
@@ -163,7 +161,7 @@
   <section id="about">
     <p class="tag" data-en="About" data-pt="Sobre" style="margin-bottom:16px;">About</p>
     <div class="about-row">
-      <div class="avatar"></div>
+      <img src="https://i.imgur.com/k4WGAcz.jpg" alt="Samuel Carvalho" class="avatar-img">
       <div class="about-text">
         <p data-en="Hi, I'm Samuel Carvalho — a video editor based in Portugal, working with brands and creators worldwide." data-pt="Olá, sou Samuel Carvalho — editor de vídeo em Portugal, trabalhando com marcas e criadores no mundo todo.">Hi, I'm Samuel Carvalho — a video editor based in Portugal, working with brands and creators worldwide.</p>
         <p data-en="I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll." data-pt="Foco em edições rápidas e limpas, com ritmo moderno — de narrativas longas a conteúdos curtos feitos para prender a atenção.">I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll.</p>
@@ -181,7 +179,7 @@
         <ul>
           <li data-en="Up to 60s" data-pt="Até 60s">Up to 60s</li>
           <li data-en="Captions + sound design" data-pt="Legendas + design de som">Captions + sound design</li>
-          <li data-en="2 revisions" data-pt="2 revisões">1 revisions</li>
+          <li data-en="1 revision" data-pt="1 revisão">1 revision</li>
         </ul>
         <a href="#contact" class="btn-outline" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
       </div>
@@ -193,7 +191,7 @@
         <ul>
           <li data-en="Up to 10 min" data-pt="Até 10 min">Up to 10 min</li>
           <li data-en="Color grading + motion graphics" data-pt="Correção de cor + motion graphics">Color grading + motion graphics</li>
-          <li data-en="3 revisions" data-pt="3 revisões">2 revisions</li>
+          <li data-en="2 revisions" data-pt="2 revisões">2 revisions</li>
         </ul>
         <a href="#contact" class="btn-primary" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
       </div>
