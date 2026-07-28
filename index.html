@@ -132,6 +132,16 @@
   .stat b{ display:block; font-size:30px; font-weight:700; background:linear-gradient(90deg,var(--blue),var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .stat span{ font-size:13px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em; }
   .sec-head{ margin-bottom:44px; padding-top:90px; }
+  .about-row{ display:flex; align-items:center; gap:28px; flex-wrap:wrap; margin-top:-20px; margin-bottom:20px; }
+  .about-photo{
+    width:96px; height:96px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg,var(--blue),var(--purple));
+    background-size:cover; background-position:center;
+    border:2px solid var(--purple);
+    box-shadow:var(--glow-purple);
+  }
+  .about-text p{ color:var(--text-dim); font-size:15.5px; max-width:640px; margin:0 0 10px; }
+  .about-text p:first-child{ color:var(--text); }
   .sec-tag{ font-family:'JetBrains Mono',monospace; color:var(--blue); font-size:13px; letter-spacing:0.1em; text-transform:uppercase; }
   .sec-head h2{ font-size:clamp(28px,4vw,42px); text-transform:uppercase; margin-top:10px; }
   .sec-head p{ color:var(--text-dim); margin-top:12px; max-width:520px; }
@@ -296,6 +306,7 @@
   <div class="nav">
     <div class="logo">SMK<span>.</span>STUDIO</div>
     <nav class="nav-links">
+      <a href="#about" data-i18n="nav_about">About</a>
       <a href="#long" data-i18n="nav_long">Long-Form</a>
       <a href="#short" data-i18n="nav_short">Short-Form</a>
       <a href="#pricing" data-i18n="nav_pricing">Pricing</a>
@@ -325,6 +336,19 @@
       <div class="stat"><b>150+</b><span data-i18n="stat_videos">Videos Edited</span></div>
       <div class="stat"><b>40+</b><span data-i18n="stat_clients">Clients</span></div>
       <div class="stat"><b>4.9★</b><span data-i18n="stat_rating">Average Rating</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="wrap">
+  <div class="sec-head">
+    <div class="sec-tag" data-i18n="tag_about">// About</div>
+  </div>
+  <div class="about-row">
+    <div class="about-photo" id="about-photo" style="background-image:url('profile.jpg');" role="img" aria-label="Samuel Carvalho"></div>
+    <div class="about-text">
+      <p data-i18n="about_p1">Hi, I'm Samuel Carvalho — a video editor based in Portugal, working with brands and creators worldwide.</p>
+      <p data-i18n="about_p2">I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll.</p>
     </div>
   </div>
 </section>
@@ -388,9 +412,9 @@
   </div>
   <div class="price-grid">
     <div class="price-card">
-      <div class="price-name" data-i18n="plan1_name">Starter</div>
-      <div class="price-value"><span class="amount" id="price1">$150</span><span class="period" data-i18n="plan1_period">/ video</span></div>
-      <p class="price-desc" data-i18n="plan1_desc">Great for single short-form or social edits.</p>
+      <div class="price-name" data-i18n="plan1_name">Short Form</div>
+      <div class="price-value"><span class="amount" id="price1">$35</span><span class="period" data-i18n="plan1_period">/ video</span></div>
+      <p class="price-desc" data-i18n="plan1_desc">Reels, shorts, TikTok — up to 60s.</p>
       <ul class="price-features">
         <li data-i18n="plan1_f1">1 short-form video (up to 60s)</li>
         <li data-i18n="plan1_f2">Color correction &amp; sound mix</li>
@@ -401,9 +425,9 @@
     </div>
     <div class="price-card featured">
       <div class="price-badge" data-i18n="plan2_badge">Most Popular</div>
-      <div class="price-name" data-i18n="plan2_name">Creator</div>
-      <div class="price-value"><span class="amount" id="price2">$450</span><span class="period" data-i18n="plan2_period">/ month</span></div>
-      <p class="price-desc" data-i18n="plan2_desc">For podcasters &amp; creators posting weekly.</p>
+      <div class="price-name" data-i18n="plan2_name">Long Form</div>
+      <div class="price-value"><span class="amount" id="price2">$140</span><span class="period" data-i18n="plan2_period">/ video</span></div>
+      <p class="price-desc" data-i18n="plan2_desc">YouTube, campaigns — up to 10 min.</p>
       <ul class="price-features">
         <li data-i18n="plan2_f1">1 long-form video + 4 short clips</li>
         <li data-i18n="plan2_f2">Color grade, sound design &amp; captions</li>
@@ -413,9 +437,9 @@
       <a class="price-cta" href="https://wa.me/351962279674" target="_blank" rel="noopener" data-i18n="plan_cta">Get Started</a>
     </div>
     <div class="price-card">
-      <div class="price-name" data-i18n="plan3_name">Studio</div>
-      <div class="price-value"><span class="amount" id="price3">$900</span><span class="period" data-i18n="plan3_period">/ month</span></div>
-      <p class="price-desc" data-i18n="plan3_desc">Full channel management for brands &amp; teams.</p>
+      <div class="price-name" data-i18n="plan3_name">Monthly Retainer</div>
+      <div class="price-value"><span class="amount" id="price3">$650</span><span class="period" data-i18n="plan3_period">/ month</span></div>
+      <p class="price-desc" data-i18n="plan3_desc">Ongoing content for brands &amp; teams.</p>
       <ul class="price-features">
         <li data-i18n="plan3_f1">2+ long-form videos + 8 short clips</li>
         <li data-i18n="plan3_f2">Thumbnails &amp; motion graphics</li>
@@ -472,12 +496,13 @@
 <div class="timeline-hud">
   <span class="tc mono" id="tc">00:00:00:00</span>
   <div class="track" id="track">
-    <div class="clip c1" data-id="hero" style="width:12%" data-i18n="clip_intro">INTRO</div>
-    <div class="clip c2" data-id="long" style="width:20%" data-i18n="clip_long">LONG</div>
-    <div class="clip c3" data-id="short" style="width:16%" data-i18n="clip_short">SHORT</div>
-    <div class="clip c4" data-id="pricing" style="width:18%" data-i18n="clip_pricing">PRICING</div>
-    <div class="clip c5" data-id="reviews" style="width:17%" data-i18n="clip_reviews">REVIEWS</div>
-    <div class="clip c1" data-id="contact" style="width:17%" data-i18n="clip_contact">CONTACT</div>
+    <div class="clip c1" data-id="hero" style="width:10%" data-i18n="clip_intro">INTRO</div>
+    <div class="clip c2" data-id="about" style="width:12%" data-i18n="clip_about">ABOUT</div>
+    <div class="clip c3" data-id="long" style="width:18%" data-i18n="clip_long">LONG</div>
+    <div class="clip c4" data-id="short" style="width:14%" data-i18n="clip_short">SHORT</div>
+    <div class="clip c5" data-id="pricing" style="width:16%" data-i18n="clip_pricing">PRICING</div>
+    <div class="clip c1" data-id="reviews" style="width:15%" data-i18n="clip_reviews">REVIEWS</div>
+    <div class="clip c2" data-id="contact" style="width:15%" data-i18n="clip_contact">CONTACT</div>
     <div class="playhead" id="playhead"></div>
   </div>
 </div>
@@ -486,10 +511,14 @@
   const translations = {
     en: {
       nav_long:"Long-Form", nav_short:"Short-Form", nav_reviews:"Reviews", nav_contact:"Contact",
+      nav_about:"About",
       eyebrow:"AVAILABLE FOR NEW PROJECTS",
       hero_p:"Video editing for YouTube, social media, and brand campaigns. From long-form to fast vertical cuts — pacing, color, and sound tuned to keep viewers until the last frame.",
       btn_view_work:"View Work", btn_message:"Message Me",
       stat_videos:"Videos Edited", stat_clients:"Clients", stat_rating:"Average Rating",
+      tag_about:"// About",
+      about_p1:"Hi, I'm Samuel Carvalho — a video editor based in Portugal, working with brands and creators worldwide.",
+      about_p2:"I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll.",
       tag_long:"// 01 — Long-Form", head_long:"Long-Form Videos",
       desc_long:"YouTube, documentaries, vlogs, and brand content. Swap each card for the real link to your video.",
       tag_c1:"YouTube · Podcast", title_c1:"Podcast Episode",
@@ -504,18 +533,18 @@
       nav_pricing:"Pricing",
       tag_pricing:"// 03 — Plans", head_pricing:"Pricing",
       desc_pricing:"Pick a plan or ask for a custom quote. Switch currency anytime.",
-      plan1_name:"Starter", plan1_period:"/ video",
-      plan1_desc:"Great for single short-form or social edits.",
+      plan1_name:"Short Form", plan1_period:"/ video",
+      plan1_desc:"Reels, shorts, TikTok — up to 60s.",
       plan1_f1:"1 short-form video (up to 60s)", plan1_f2:"Color correction & sound mix",
       plan1_f3:"2 rounds of revisions", plan1_f4:"48h turnaround",
-      plan2_badge:"Most Popular", plan2_name:"Creator", plan2_period:"/ month",
-      plan2_desc:"For podcasters & creators posting weekly.",
-      plan2_f1:"1 long-form video + 4 short clips", plan2_f2:"Color grade, sound design & captions",
-      plan2_f3:"Unlimited revisions", plan2_f4:"Priority 24–48h turnaround",
-      plan3_name:"Studio", plan3_period:"/ month",
-      plan3_desc:"Full channel management for brands & teams.",
-      plan3_f1:"2+ long-form videos + 8 short clips", plan3_f2:"Thumbnails & motion graphics",
-      plan3_f3:"Dedicated editor & strategy call", plan3_f4:"Same-day priority support",
+      plan2_badge:"Most Popular", plan2_name:"Long Form", plan2_period:"/ video",
+      plan2_desc:"YouTube, campaigns — up to 10 min.",
+      plan2_f1:"1 long-form video (up to 10 min)", plan2_f2:"Color grade & motion graphics",
+      plan2_f3:"2 rounds of revisions", plan2_f4:"Priority 24–48h turnaround",
+      plan3_name:"Monthly Retainer", plan3_period:"/ month",
+      plan3_desc:"Ongoing content for brands & teams.",
+      plan3_f1:"4 long-form videos + 8 short clips", plan3_f2:"Priority turnaround",
+      plan3_f3:"Unlimited revisions", plan3_f4:"Dedicated editor & strategy call",
       plan_cta:"Get Started",
       price_note:"Sample pricing — adjust to match your real rates. Custom projects quoted individually.",
       clip_pricing:"PRICING",
@@ -530,15 +559,19 @@
       contact_head:"Let's Edit Your Next Video",
       contact_desc:"Send over your project or just say hi — I reply fast on WhatsApp or email.",
       footer_text:"© 2026 SMK Studio — Video Editing",
-      clip_intro:"INTRO", clip_long:"LONG", clip_short:"SHORT", clip_reviews:"REVIEWS", clip_contact:"CONTACT",
+      clip_intro:"INTRO", clip_about:"ABOUT", clip_long:"LONG", clip_short:"SHORT", clip_reviews:"REVIEWS", clip_contact:"CONTACT",
       hero_h1:'CUTS THAT <span class="glow-blue">HOOK</span>.<br>STORIES THAT <span class="glow-purple">STAY</span>.'
     },
     pt: {
       nav_long:"Longos", nav_short:"Curtos", nav_reviews:"Depoimentos", nav_contact:"Contacto",
+      nav_about:"Sobre",
       eyebrow:"DISPONÍVEL PARA NOVOS PROJETOS",
       hero_p:"Edição de vídeo para YouTube, redes sociais e campanhas de marca. Do longo-formato ao vertical rápido — ritmo, cor e som ao nível certo para reter até ao fim.",
       btn_view_work:"Ver Trabalhos", btn_message:"Falar Agora",
       stat_videos:"Vídeos Editados", stat_clients:"Clientes", stat_rating:"Avaliação Média",
+      tag_about:"// Sobre",
+      about_p1:"Olá, sou o Samuel Carvalho — editor de vídeo baseado em Portugal, a trabalhar com marcas e criadores em todo o mundo.",
+      about_p2:"Foco-me em edições rápidas e limpas, com ritmo moderno — de storytelling em formato longo a conteúdo curto feito para prender a atenção.",
       tag_long:"// 01 — Formato Longo", head_long:"Vídeos Longos",
       desc_long:"YouTube, documentários, vlogs e conteúdo de marca. Substitui cada card pelo link real do teu vídeo.",
       tag_c1:"YouTube · Podcast", title_c1:"Episódio de Podcast",
@@ -553,18 +586,18 @@
       nav_pricing:"Preços",
       tag_pricing:"// 03 — Planos", head_pricing:"Preços",
       desc_pricing:"Escolhe um plano ou pede um orçamento personalizado. Troca a moeda quando quiseres.",
-      plan1_name:"Inicial", plan1_period:"/ vídeo",
-      plan1_desc:"Ideal para uma edição avulsa de conteúdo curto ou redes sociais.",
+      plan1_name:"Formato Curto", plan1_period:"/ vídeo",
+      plan1_desc:"Reels, shorts, TikTok — até 60s.",
       plan1_f1:"1 vídeo curto (até 60s)", plan1_f2:"Correção de cor e mix de som",
       plan1_f3:"2 rondas de revisão", plan1_f4:"Entrega em 48h",
-      plan2_badge:"Mais Popular", plan2_name:"Criador", plan2_period:"/ mês",
-      plan2_desc:"Para podcasters e criadores que publicam semanalmente.",
-      plan2_f1:"1 vídeo longo + 4 cortes curtos", plan2_f2:"Grading de cor, design de som e legendas",
-      plan2_f3:"Revisões ilimitadas", plan2_f4:"Prioridade, entrega em 24–48h",
-      plan3_name:"Estúdio", plan3_period:"/ mês",
-      plan3_desc:"Gestão completa de canal para marcas e equipas.",
-      plan3_f1:"2+ vídeos longos + 8 cortes curtos", plan3_f2:"Thumbnails e motion graphics",
-      plan3_f3:"Editor dedicado e chamada de estratégia", plan3_f4:"Suporte prioritário no mesmo dia",
+      plan2_badge:"Mais Popular", plan2_name:"Formato Longo", plan2_period:"/ vídeo",
+      plan2_desc:"YouTube, campanhas — até 10 min.",
+      plan2_f1:"1 vídeo longo (até 10 min)", plan2_f2:"Grading de cor e motion graphics",
+      plan2_f3:"2 rondas de revisão", plan2_f4:"Prioridade, entrega em 24–48h",
+      plan3_name:"Mensalidade", plan3_period:"/ mês",
+      plan3_desc:"Conteúdo contínuo para marcas e equipas.",
+      plan3_f1:"4 vídeos longos + 8 cortes curtos", plan3_f2:"Prioridade na entrega",
+      plan3_f3:"Revisões ilimitadas", plan3_f4:"Editor dedicado e chamada de estratégia",
       plan_cta:"Começar Agora",
       price_note:"Preços de exemplo — ajusta aos teus valores reais. Projetos personalizados são orçados individualmente.",
       clip_pricing:"PREÇOS",
@@ -579,16 +612,16 @@
       contact_head:"Vamos Editar o Teu Próximo Vídeo?",
       contact_desc:"Envia o teu projeto ou apenas diz olá — respondo rápido por WhatsApp ou email.",
       footer_text:"© 2026 SMK Studio — Edição de Vídeo",
-      clip_intro:"INTRO", clip_long:"LONGOS", clip_short:"CURTOS", clip_reviews:"DEPOIM.", clip_contact:"CONTACTO",
+      clip_intro:"INTRO", clip_about:"SOBRE", clip_long:"LONGOS", clip_short:"CURTOS", clip_reviews:"DEPOIM.", clip_contact:"CONTACTO",
       hero_h1:'CORTES QUE <span class="glow-blue">PRENDEM</span>.<br>HISTÓRIAS QUE <span class="glow-purple">FICAM</span>.'
     }
   };
 
   // Sample prices per plan — edit to match your real rates.
   const prices = {
-    plan1: { usd: 150, eur: 140 },
-    plan2: { usd: 450, eur: 420 },
-    plan3: { usd: 900, eur: 840 }
+    plan1: { usd: 35, eur: 30 },
+    plan2: { usd: 140, eur: 120 },
+    plan3: { usd: 650, eur: 600 }
   };
   let currentCurrency = 'usd';
 
@@ -629,7 +662,7 @@
     el.onclick = null;
   }
 
-  const sections = ['hero','long','short','pricing','reviews','contact'];
+  const sections = ['hero','about','long','short','pricing','reviews','contact'];
   const clips = document.querySelectorAll('.clip');
   const playhead = document.getElementById('playhead');
   const tc = document.getElementById('tc');
