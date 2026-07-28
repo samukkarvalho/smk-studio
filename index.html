@@ -485,6 +485,20 @@
   <span data-i18n="footer_text">© 2026 SMK Studio — Video Editing</span>
 </footer>
 
+<div class="timeline-hud">
+  <span class="tc mono" id="tc">00:00:00:00</span>
+  <div class="track" id="track">
+    <div class="clip c1" data-id="hero" style="width:10%" data-i18n="clip_intro">INTRO</div>
+    <div class="clip c2" data-id="about" style="width:12%" data-i18n="clip_about">ABOUT</div>
+    <div class="clip c3" data-id="long" style="width:18%" data-i18n="clip_long">LONG</div>
+    <div class="clip c4" data-id="short" style="width:14%" data-i18n="clip_short">SHORT</div>
+    <div class="clip c5" data-id="pricing" style="width:16%" data-i18n="clip_pricing">PRICING</div>
+    <div class="clip c1" data-id="reviews" style="width:15%" data-i18n="clip_reviews">REVIEWS</div>
+    <div class="clip c2" data-id="contact" style="width:15%" data-i18n="clip_contact">CONTACT</div>
+    <div class="playhead" id="playhead"></div>
+  </div>
+</div>
+
 <script>
   const translations = {
     en: {
@@ -561,17 +575,17 @@
       tag_pricing:"// 03 — Planos", head_pricing:"Preços",
       desc_pricing:"Escolha um plano ou peça um orçamento personalizado. Troque a moeda quando quiser.",
       plan1_name:"Formato Curto", plan1_period:"/ vídeo",
-      plan1_desc:"Ideal para Instagram, TikTok e YouTube Shorts.",
-      plan1_f1:"Vídeo de até 60 segundos", plan1_f2:"Legendas animadas, músicas e efeitos sonoros",
-      plan1_f3:"1 revisão incluída", plan1_f4:"Correção de cor + entrega em até 48h",
+      plan1_desc:"Reels, shorts, TikTok — até 60s.",
+      plan1_f1:"1 vídeo curto (até 60s)", plan1_f2:"Legendas , Músicas e Efeitos Sonoros",
+      plan1_f3:"1 revisão", plan1_f4:"Entrega em 48h",
       plan2_badge:"Mais Popular", plan2_name:"Formato Longo", plan2_period:"/ vídeo",
-      plan2_desc:"Ideal para YouTube, podcasts, vlogs e vídeos institucionais.",
-      plan2_f1:"Vídeo de até 15 minutos", plan2_f2:"Legendas, tratamento de áudio, músicas e efeitos",
-      plan2_f3:"Correção de cor e gráficos básicos", plan2_f4:"2 revisões + entrega prioritária em 24–48h",
+      plan2_desc:"YouTube, campanhas — até 15 min.",
+      plan2_f1:"1 vídeo longo (até 15 min)", plan2_f2:"Legendas, Músicas, Efeitos Sonoros, Gráficos",
+      plan2_f3:"2 revisão", plan2_f4:"Prioridade, entrega em 24–48h",
       plan3_name:"Mensalidade", plan3_period:"/ mês",
-      plan3_desc:"Para criadores de conteúdo e empresas que publicam semanalmente.",
-      plan3_f1:"4 vídeos longos + 8 vídeos curtos", plan3_f2:"Prioridade na fila de edição",
-      plan3_f3:"Até 2 revisões por vídeo", plan3_f4:"Suporte direto via WhatsApp",
+      plan3_desc:"Conteúdo contínuo para marcas e equipes.",
+      plan3_f1:"4 vídeos longos + 8 cortes curtos", plan3_f2:"Prioridade na entrega",
+      plan3_f3:"Revisões ilimitadas", plan3_f4:"Editor dedicado e reunião de estratégia",
       plan_cta:"Começar Agora",
       clip_pricing:"PREÇOS",
       tag_reviews:"// 04 — Confiança", head_reviews:"Feedbecks dos Clientes",
@@ -634,8 +648,42 @@
     el.onclick = null;
   }
 
-  window.addEventListener('load', () => { setLang('en'); });
-onScroll(); });
+  const sections = ['hero','about','long','short','pricing','reviews','contact'];
+  const clips = document.querySelectorAll('.clip');
+  const playhead = document.getElementById('playhead');
+  const tc = document.getElementById('tc');
+
+  function fmtTC(pct){
+    const totalFrames = (2*60+30)*24;
+    const f = Math.floor(pct/100 * totalFrames);
+    const frames = f % 24;
+    const totalSec = Math.floor(f/24);
+    const sec = totalSec % 60;
+    const min = Math.floor(totalSec/60) % 60;
+    const hh = Math.floor(totalSec/3600);
+    const p = n => String(n).padStart(2,'0');
+    return `${p(hh)}:${p(min)}:${p(sec)}:${p(frames)}`;
+  }
+
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollH = doc.scrollHeight - doc.clientHeight;
+    const pct = scrollH > 0 ? (scrollTop/scrollH)*100 : 0;
+    playhead.style.left = pct + '%';
+    tc.textContent = fmtTC(pct);
+    let current = 'hero';
+    for(const id of sections){
+      const el = document.getElementById(id);
+      if(el){
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight*0.5) current = id;
+      }
+    }
+    clips.forEach(c => c.classList.toggle('active', c.dataset.id === current));
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('load', () => { setLang('en'); onScroll(); });
 </script>
 </body>
 </html>
