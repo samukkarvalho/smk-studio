@@ -1,236 +1,663 @@
 <!DOCTYPE html>
-<html lang="en" data-lang="en">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMK Studio — Video Editor</title>
+<title>SMK Studio — Video Editing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#05050b; --card:#0d0d18; --border:#23233f; --border2:#1c1c30;
-    --text:#eceaf7; --muted:#8b8ba0; --muted2:#a3a3b8;
-    --purple:#7f5af0; --cyan:#00e5ff; --amber:#f0a84a;
+    --bg: #06060a;
+    --bg-soft: #0c0c16;
+    --panel: #0f1020;
+    --blue: #3ecbff;
+    --blue-dim: #1b6f9c;
+    --purple: #b565ff;
+    --purple-dim: #6a3aa8;
+    --pink: #ff5ec4;
+    --text: #eef0ff;
+    --text-dim: #9aa0c8;
+    --line: rgba(160,170,255,0.14);
+    --glow-blue: 0 0 14px rgba(62,203,255,0.55), 0 0 40px rgba(62,203,255,0.18);
+    --glow-purple: 0 0 14px rgba(181,101,255,0.55), 0 0 40px rgba(181,101,255,0.18);
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; line-height:1.5;}
-  a{color:inherit;}
-  .container{max-width:960px; margin:0 auto; padding:0 24px;}
-
-  nav{position:sticky; top:0; z-index:10; display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:rgba(5,5,11,0.9); border-bottom:1px solid var(--border2); backdrop-filter:blur(6px);}
-  .logo{font-weight:600; font-size:18px; letter-spacing:0.5px;}
-  .logo span{color:var(--purple); text-shadow:0 0 12px rgba(127,90,240,0.5);}
-  .nav-right{display:flex; align-items:center; gap:16px;}
-  .nav-right span{font-size:13px; color:var(--muted2);}
-  #langBtn{background:transparent; border:1px solid #3d3d5c; color:#cfc9f7; font-size:12px; padding:6px 12px; border-radius:6px; cursor:pointer;}
-
-  .hero{position:relative; padding:72px 24px 60px; text-align:center; overflow:hidden;}
-  .hero::before{content:""; position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:500px; height:320px; background:radial-gradient(ellipse,rgba(124,58,237,0.35),transparent 70%); filter:blur(20px); pointer-events:none;}
-  .hero-inner{position:relative; max-width:520px; margin:0 auto;}
-  .eyebrow{color:var(--cyan); font-size:12px; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px;}
-  h1{font-size:32px; font-weight:600; margin-bottom:18px; line-height:1.25;}
-  .hero p.sub{font-size:15px; color:var(--muted2); margin-bottom:28px;}
-  .btn-row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
-  .btn-primary{background:linear-gradient(135deg,var(--purple),var(--cyan)); color:var(--bg); border:none; font-size:14px; font-weight:600; padding:13px 24px; border-radius:8px; cursor:pointer; box-shadow:0 0 24px rgba(127,90,240,0.5); text-decoration:none; display:inline-block;}
-  .btn-outline{background:transparent; color:var(--text); border:1px solid #3d3d5c; font-size:14px; font-weight:500; padding:13px 24px; border-radius:8px; cursor:pointer; text-decoration:none; display:inline-block;}
-
-  .stats{display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--border2); border-bottom:1px solid var(--border2);}
-  .stat{padding:20px; text-align:center; border-right:1px solid var(--border2);}
-  .stat:last-child{border-right:none;}
-  .stat .num{font-size:22px; font-weight:600; color:var(--purple);}
-  .stat:nth-child(2) .num{color:var(--cyan);}
-  .stat .label{font-size:11px; color:var(--muted); margin-top:4px;}
-
-  section{padding:48px 24px 8px;}
-  .section-title{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px;}
-  .section-title p.tag{font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--cyan);}
-  .section-title p.hint{font-size:11px; color:#6b6b85;}
-
-  .video-feature{background:var(--card); border:1px solid var(--border); border-radius:12px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer;}
-  .play-btn{width:56px; height:56px; border-radius:50%; background:rgba(127,90,240,0.15); border:1px solid var(--purple); display:flex; align-items:center; justify-content:center; box-shadow:0 0 20px rgba(127,90,240,0.35);}
-  .play-btn.small{width:40px; height:40px;}
-  .play-btn svg{width:20px; height:20px; fill:#c9c3f7;}
-  .video-label{position:absolute; bottom:12px; left:14px; font-size:11px; color:var(--muted);}
-
-  .grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:12px;}
-  .grid-4{display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:10px;}
-  .thumb{background:var(--card); border:1px solid var(--border); border-radius:8px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; cursor:pointer;}
-  .thumb.vert{aspect-ratio:9/16; border-radius:10px;}
-
-  .reviews-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
-  .review-card{background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px;}
-  .stars{color:var(--amber); font-size:14px; margin-bottom:10px; letter-spacing:2px;}
-  .review-card p.quote{font-size:13px; color:#c3c3d6; margin-bottom:10px;}
-  .review-card p.author{font-size:11px; color:#6b6b85;}
-
-  .about-row{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap;}
-  .avatar-img{width:64px; height:64px; border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 0 20px rgba(127,90,240,0.4);}
-  .about-text p{font-size:14px; color:#c3c3d6; margin-bottom:12px;}
-
-  .pricing-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:8px;}
-  .price-card{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:22px; position:relative;}
-  .price-card.featured{border:2px solid var(--purple); box-shadow:0 0 24px rgba(127,90,240,0.25);}
-  .badge{position:absolute; top:-11px; left:22px; background:var(--purple); color:var(--bg); font-size:11px; font-weight:600; padding:3px 10px; border-radius:6px;}
-  .price-card h3{font-size:15px; font-weight:600; margin-bottom:4px;}
-  .price-card .plan-desc{font-size:12px; color:var(--muted); margin-bottom:16px;}
-  .price-card .price{font-size:26px; font-weight:600; margin-bottom:16px; color:var(--purple);}
-  .price-card.featured .price{color:var(--cyan);}
-  .price-card .price span{font-size:12px; color:var(--muted); font-weight:400;}
-  .price-card ul{list-style:none; font-size:12px; color:#c3c3d6; line-height:2; margin-bottom:18px;}
-  .price-card .btn-outline, .price-card .btn-primary{width:100%; text-align:center; padding:11px;}
-
-  .cta{position:relative; padding:56px 24px 56px; text-align:center; border-top:1px solid var(--border2); margin-top:36px; overflow:hidden;}
-  .cta::before{content:""; position:absolute; bottom:-70px; left:50%; transform:translateX(-50%); width:420px; height:220px; background:radial-gradient(ellipse,rgba(0,229,255,0.2),transparent 70%); filter:blur(15px);}
-  .cta h2{position:relative; font-size:19px; font-weight:600; margin-bottom:20px;}
-  .cta .btn-row{position:relative;}
-  .contact-btn{display:inline-flex; align-items:center; gap:7px; font-size:14px; padding:12px 20px; border-radius:8px; text-decoration:none;}
-  .whatsapp{background:#1f7a4d; color:#eafff2;}
-  .email{background:transparent; border:1px solid #3d3d5c; color:var(--text);}
-
-  footer{text-align:center; padding:24px; font-size:12px; color:#6b6b85; border-top:1px solid var(--border2);}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:'Rajdhani', sans-serif; font-size:17px; line-height:1.5;
+    overflow-x:hidden; padding-bottom:64px;
+  }
+  h1,h2,h3, .display{ font-family:'Orbitron', sans-serif; letter-spacing:0.02em; margin:0; }
+  .mono{ font-family:'JetBrains Mono', monospace; letter-spacing:0.02em; }
+  a{color:inherit; text-decoration:none;}
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+  .bg-fx{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(600px 400px at 15% -5%, rgba(181,101,255,0.16), transparent 60%),
+      radial-gradient(700px 500px at 85% 10%, rgba(62,203,255,0.14), transparent 60%),
+      linear-gradient(var(--bg), var(--bg));
+  }
+  .bg-fx::after{
+    content:""; position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(160,170,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(160,170,255,0.05) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image: radial-gradient(1200px 700px at 50% 0%, black, transparent 75%);
+  }
+  .orb{
+    position:fixed; z-index:0; pointer-events:none;
+    border-radius:50%; filter:blur(70px); opacity:0.55;
+    will-change:transform;
+  }
+  .orb1{
+    width:520px; height:520px; top:-120px; left:-160px;
+    background:radial-gradient(circle, rgba(181,101,255,0.55), transparent 70%);
+    animation:drift1 22s ease-in-out infinite;
+  }
+  .orb2{
+    width:460px; height:460px; top:30%; right:-180px;
+    background:radial-gradient(circle, rgba(62,203,255,0.5), transparent 70%);
+    animation:drift2 26s ease-in-out infinite;
+  }
+  .orb3{
+    width:400px; height:400px; bottom:-140px; left:35%;
+    background:radial-gradient(circle, rgba(255,94,196,0.4), transparent 70%);
+    animation:drift3 30s ease-in-out infinite;
+  }
+  @keyframes drift1{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(60px,80px) scale(1.15); }
+  }
+  @keyframes drift2{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(-70px,60px) scale(1.1); }
+  }
+  @keyframes drift3{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(50px,-50px) scale(1.2); }
+  }
+  @media (prefers-reduced-motion: reduce){ .orb{animation:none !important;} }
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(6,6,10,0.75); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+  }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1180px; margin:0 auto; gap:16px; }
+  .logo{ font-size:20px; font-weight:900; color:var(--text); white-space:nowrap;}
+  .logo span{color:var(--blue); text-shadow:var(--glow-blue);}
+  .nav-links{ display:flex; gap:30px; font-weight:600; font-size:15px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-dim); }
+  .nav-links a{transition:color .2s;}
+  .nav-links a:hover{color:var(--blue);}
+  .nav-right{display:flex; align-items:center; gap:14px;}
+  .lang-toggle{ display:flex; border:1px solid var(--line); border-radius:20px; overflow:hidden; font-family:'JetBrains Mono',monospace; font-size:12px; }
+  .lang-toggle button{ background:transparent; border:none; color:var(--text-dim); padding:7px 13px; cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:12px; transition:.2s; }
+  .lang-toggle button.active{ background:linear-gradient(90deg,var(--blue),var(--purple)); color:#04060f; font-weight:700; }
+  .nav-cta{
+    display:flex; align-items:center; gap:8px; padding:9px 18px; border:1px solid var(--blue); border-radius:4px;
+    font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:0.05em; color:var(--blue);
+    box-shadow:inset 0 0 10px rgba(62,203,255,0.08); transition:.2s; white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--blue); color:#04121a; box-shadow:var(--glow-blue);}
+  @media(max-width:820px){ .nav-links{display:none;} }
+  section{position:relative; z-index:1;}
+  .hero{ padding:120px 28px 100px; text-align:center; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:13px;
+    color:var(--purple); border:1px solid var(--purple-dim); padding:6px 14px; border-radius:20px; margin-bottom:28px;
+    text-shadow:0 0 8px rgba(181,101,255,0.6);
+  }
+  .eyebrow .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--purple);
+    box-shadow:0 0 8px var(--purple), 0 0 16px var(--purple); animation:pulse 1.6s infinite ease-in-out;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .hero h1{ font-size:clamp(38px, 6.5vw, 78px); font-weight:900; line-height:1.05; text-transform:uppercase; }
+  .hero h1 .glow-blue{color:var(--blue); text-shadow:var(--glow-blue);}
+  .hero h1 .glow-purple{color:var(--purple); text-shadow:var(--glow-purple);}
+  .hero p{ max-width:600px; margin:26px auto 0; color:var(--text-dim); font-size:19px; }
+  .hero-ctas{ display:flex; gap:16px; justify-content:center; margin-top:40px; flex-wrap:wrap; }
+  .btn{
+    padding:15px 30px; border-radius:6px; font-weight:700; font-size:15px; text-transform:uppercase;
+    letter-spacing:0.05em; cursor:pointer; transition:.2s; display:inline-flex; align-items:center; gap:10px;
+  }
+  .btn-primary{ background:linear-gradient(90deg, var(--blue), var(--purple)); color:#05060f; box-shadow:0 0 25px rgba(62,203,255,0.35), 0 0 25px rgba(181,101,255,0.2); }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 0 35px rgba(62,203,255,0.5), 0 0 35px rgba(181,101,255,0.35);}
+  .btn-ghost{ border:1px solid var(--line); color:var(--text); }
+  .btn-ghost:hover{border-color:var(--purple); color:var(--purple); box-shadow:var(--glow-purple);}
+  .stats{ display:flex; justify-content:center; gap:60px; margin-top:70px; flex-wrap:wrap; }
+  .stat b{ display:block; font-size:30px; font-weight:700; background:linear-gradient(90deg,var(--blue),var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .stat span{ font-size:13px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em; }
+  .sec-head{ margin-bottom:44px; padding-top:90px; }
+  .sec-tag{ font-family:'JetBrains Mono',monospace; color:var(--blue); font-size:13px; letter-spacing:0.1em; text-transform:uppercase; }
+  .sec-head h2{ font-size:clamp(28px,4vw,42px); text-transform:uppercase; margin-top:10px; }
+  .sec-head p{ color:var(--text-dim); margin-top:12px; max-width:520px; }
+  .grid-long{ display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:26px; }
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; transition:.25s; }
+  .card:hover{ border-color:var(--blue); box-shadow:0 0 30px rgba(62,203,255,0.15); transform:translateY(-4px); }
+  .thumb{
+    position:relative; aspect-ratio:16/9; cursor:pointer;
+    background: linear-gradient(160deg, rgba(62,203,255,0.18), rgba(181,101,255,0.18)), repeating-linear-gradient(45deg, #0d0d1a 0 12px, #101024 12px 24px);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .play-btn{ width:56px; height:56px; border-radius:50%; border:2px solid var(--blue); display:flex; align-items:center; justify-content:center; box-shadow:var(--glow-blue); background:rgba(6,6,10,0.5); }
+  .play-btn::after{ content:""; border-style:solid; border-width:9px 0 9px 15px; border-color:transparent transparent transparent var(--blue); margin-left:4px; }
+  .thumb .duration{ position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.6); font-family:'JetBrains Mono',monospace; font-size:12px; padding:3px 8px; border-radius:4px; color:var(--text); }
+  .card-body{padding:18px 20px 22px;}
+  .card-actions{
+    padding:16px 20px; display:flex; justify-content:flex-end;
+  }
+  .yt-link{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--text-dim);
+    border:1px solid var(--line); padding:6px 12px; border-radius:20px; transition:.2s;
+  }
+  .yt-link:hover{ color:var(--blue); border-color:var(--blue); box-shadow:0 0 12px rgba(62,203,255,0.25); }
+  .card-tag{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--purple); text-transform:uppercase; letter-spacing:0.08em; }
+  .card-body h3{font-size:19px; margin-top:8px; font-weight:700;}
+  .card-body p{color:var(--text-dim); font-size:14px; margin-top:6px;}
+  .shorts-row{ display:flex; gap:20px; overflow-x:auto; padding-bottom:14px; scroll-snap-type:x mandatory; }
+  .shorts-row::-webkit-scrollbar{height:6px;}
+  .shorts-row::-webkit-scrollbar-thumb{background:var(--line); border-radius:10px;}
+  .short-card{ flex:0 0 200px; scroll-snap-align:start; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; transition:.25s; }
+  .short-card:hover{border-color:var(--pink); box-shadow:0 0 26px rgba(255,94,196,0.18); transform:translateY(-4px);}
+  .short-thumb{
+    aspect-ratio:9/16;
+    background: linear-gradient(200deg, rgba(255,94,196,0.2), rgba(181,101,255,0.2)), repeating-linear-gradient(45deg, #0d0d1a 0 10px, #101024 10px 20px);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .short-thumb .play-btn{width:42px; height:42px; border-color:var(--pink); box-shadow:0 0 14px rgba(255,94,196,0.55);}
+  .short-thumb .play-btn::after{border-color:transparent transparent transparent var(--pink); border-width:7px 0 7px 12px;}
+  .short-thumb .tag-pill{ position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.55); font-family:'JetBrains Mono',monospace; font-size:10px; padding:3px 8px; border-radius:20px; color:var(--pink); }
+  .short-body{padding:12px 14px;}
+  .short-body h4{font-size:14px; font-weight:700;}
+  .short-body span{font-size:12px; color:var(--text-dim);}
+  .pricing-top{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  }
+  .currency-toggle{
+    display:flex; border:1px solid var(--line); border-radius:20px; overflow:hidden;
+    font-family:'JetBrains Mono',monospace; font-size:12px; flex-shrink:0;
+  }
+  .currency-toggle button{
+    background:transparent; border:none; color:var(--text-dim); padding:8px 16px; cursor:pointer;
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; transition:.2s;
+  }
+  .currency-toggle button.active{
+    background:linear-gradient(90deg,var(--blue),var(--purple)); color:#04060f; font-weight:700;
+  }
+  .price-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:24px; }
+  .price-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:32px 28px; display:flex; flex-direction:column; position:relative; transition:.25s;
+  }
+  .price-card:hover{ transform:translateY(-4px); }
+  .price-card.featured{
+    border-color:var(--purple);
+    box-shadow:0 0 34px rgba(181,101,255,0.2);
+  }
+  .price-badge{
+    position:absolute; top:-13px; right:24px;
+    background:linear-gradient(90deg,var(--blue),var(--purple));
+    color:#04060f; font-size:11px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.06em; padding:5px 12px; border-radius:20px;
+  }
+  .price-name{ font-family:'Orbitron',sans-serif; font-size:15px; text-transform:uppercase; color:var(--text-dim); letter-spacing:0.05em; }
+  .price-value{ margin-top:14px; display:flex; align-items:baseline; gap:6px; }
+  .price-value .amount{ font-family:'Orbitron',sans-serif; font-size:42px; font-weight:900;
+    background:linear-gradient(90deg,var(--blue),var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .price-value .period{ color:var(--text-dim); font-size:14px; }
+  .price-desc{ color:var(--text-dim); font-size:14px; margin-top:10px; }
+  .price-features{ list-style:none; padding:0; margin:24px 0 28px; flex:1; }
+  .price-features li{
+    display:flex; align-items:flex-start; gap:10px; font-size:14.5px; color:var(--text);
+    margin-bottom:12px; line-height:1.35;
+  }
+  .price-features li::before{
+    content:"✓"; color:var(--blue); font-weight:700; text-shadow:0 0 6px rgba(62,203,255,0.6);
+  }
+  .price-cta{
+    text-align:center; padding:13px; border-radius:6px; font-weight:700; font-size:14px;
+    text-transform:uppercase; letter-spacing:0.05em; border:1px solid var(--blue); color:var(--blue); transition:.2s;
+  }
+  .price-cta:hover{ background:var(--blue); color:#04121a; box-shadow:var(--glow-blue); }
+  .price-card.featured .price-cta{
+    background:linear-gradient(90deg,var(--blue),var(--purple)); color:#05060f; border:none;
+  }
+  .price-note{ text-align:center; color:var(--text-dim); font-size:13px; margin-top:32px; }
+  .testi-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:24px; }
+  .testi-card{ background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:28px; position:relative; }
+  .testi-card::before{ content:"\201C"; position:absolute; top:14px; left:20px; font-size:50px; color:var(--purple); opacity:0.35; }
+  .stars{color:var(--blue); letter-spacing:3px; margin-bottom:14px; text-shadow:0 0 8px rgba(62,203,255,0.5);}
+  .testi-card p.quote{color:var(--text); font-size:15.5px; margin-bottom:20px; position:relative; z-index:1;}
+  .testi-who{display:flex; align-items:center; gap:12px;}
+  .avatar{ width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,var(--blue),var(--purple)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:#04060f; }
+  .testi-who b{display:block; font-size:14.5px;}
+  .testi-who span{font-size:12.5px; color:var(--text-dim);}
+  .contact{ text-align:center; padding:100px 28px 120px; }
+  .contact-panel{
+    max-width:760px; margin:0 auto;
+    background:radial-gradient(500px 260px at 50% 0%, rgba(181,101,255,0.14), transparent 70%), var(--panel);
+    border:1px solid var(--line); border-radius:16px; padding:60px 40px;
+  }
+  .contact h2{font-size:clamp(28px,4vw,44px); text-transform:uppercase;}
+  .contact p{color:var(--text-dim); margin-top:16px; max-width:460px; margin-left:auto; margin-right:auto;}
+  .contact-ctas{ display:flex; gap:16px; justify-content:center; margin-top:36px; flex-wrap:wrap; }
+  .btn-whats{ background:#1fce7a; color:#04140a; box-shadow:0 0 22px rgba(31,206,122,0.35); }
+  .btn-whats:hover{box-shadow:0 0 32px rgba(31,206,122,0.55); transform:translateY(-2px);}
+  .btn-mail{ border:1px solid var(--blue); color:var(--blue); }
+  .btn-mail:hover{background:var(--blue); color:#04121a; box-shadow:var(--glow-blue);}
+  footer{ text-align:center; padding:36px 20px 90px; color:var(--text-dim); font-size:13px; border-top:1px solid var(--line); }
+  footer .logo{margin-bottom:8px;}
+  .timeline-hud{
+    position:fixed; left:0; right:0; bottom:0; z-index:100; height:56px;
+    background:rgba(6,6,10,0.9); backdrop-filter:blur(8px); border-top:1px solid var(--line);
+    display:flex; align-items:center; padding:0 20px; gap:16px;
+  }
+  .tc{ font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--blue); text-shadow:0 0 8px rgba(62,203,255,0.5); min-width:112px; }
+  .track{ position:relative; flex:1; height:22px; background:var(--bg-soft); border:1px solid var(--line); border-radius:4px; display:flex; overflow:hidden; }
+  .clip{
+    height:100%; border-right:1px solid rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:0.05em; color:rgba(255,255,255,0.55); text-transform:uppercase; transition:.2s;
+  }
+  .clip.c1{background:rgba(62,203,255,0.14);}
+  .clip.c2{background:rgba(181,101,255,0.14);}
+  .clip.c3{background:rgba(255,94,196,0.14);}
+  .clip.c4{background:rgba(62,203,255,0.14);}
+  .clip.c5{background:rgba(181,101,255,0.14);}
+  .clip.active{color:#fff; box-shadow:inset 0 0 0 1px rgba(255,255,255,0.3);}
+  .playhead{
+    position:absolute; top:-4px; bottom:-4px; width:2px; background:linear-gradient(var(--blue),var(--purple));
+    box-shadow:0 0 10px var(--blue), 0 0 10px var(--purple); left:0%; transition:left .05s linear;
+  }
+  @media(max-width:700px){ .tc{display:none;} .timeline-hud{padding:0 12px;} .clip{font-size:8px;} }
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
 </style>
 </head>
 <body>
-
-<nav>
-  <div class="logo">SMK <span>STUDIO</span></div>
-  <div class="nav-right">
-    <span>Work</span><span>Reviews</span>
-    <button id="langBtn">PT</button>
+<div class="bg-fx"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<header>
+  <div class="nav">
+    <div class="logo">SMK<span>.</span>STUDIO</div>
+    <nav class="nav-links">
+      <a href="#long" data-i18n="nav_long">Long-Form</a>
+      <a href="#short" data-i18n="nav_short">Short-Form</a>
+      <a href="#pricing" data-i18n="nav_pricing">Pricing</a>
+      <a href="#reviews" data-i18n="nav_reviews">Reviews</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+        <button id="btn-pt" onclick="setLang('pt')">PT</button>
+      </div>
+      <a class="nav-cta" href="https://wa.me/351962279674" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
   </div>
-</nav>
+</header>
 
-<div class="hero">
-  <div class="hero-inner">
-    <p class="eyebrow" data-en="Video editor · Porto, Portugal" data-pt="Editor de vídeo · Porto, Portugal">Video editor · Porto, Portugal</p>
-    <h1 data-en="Frame by frame, built to keep you watching" data-pt="Quadro a quadro, feito para prender sua atenção">Frame by frame, built to keep you watching</h1>
-    <p class="sub" data-en="Long-form storytelling and scroll-stopping shorts for brands and creators." data-pt="Narrativas em vídeos longos e shorts que prendem o público, para marcas e criadores.">Long-form storytelling and scroll-stopping shorts for brands and creators.</p>
-    <div class="btn-row">
-      <a href="#work" class="btn-primary" data-en="Watch showreel" data-pt="Ver showreel">Watch showreel</a>
-      <a href="#contact" class="btn-outline" data-en="Start a project" data-pt="Começar um projeto">Start a project</a>
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> <span data-i18n="eyebrow">AVAILABLE FOR NEW PROJECTS</span></div>
+    <h1 id="hero-h1">CUTS THAT <span class="glow-blue">HOOK</span>.<br>STORIES THAT <span class="glow-purple">STAY</span>.</h1>
+    <p data-i18n="hero_p">Video editing for YouTube, social media, and brand campaigns. From long-form to fast vertical cuts — pacing, color, and sound tuned to keep viewers until the last frame.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#long" data-i18n="btn_view_work">View Work</a>
+      <a class="btn btn-ghost" href="https://wa.me/351962279674" target="_blank" rel="noopener" data-i18n="btn_message">Message Me</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>150+</b><span data-i18n="stat_videos">Videos Edited</span></div>
+      <div class="stat"><b>40+</b><span data-i18n="stat_clients">Clients</span></div>
+      <div class="stat"><b>4.9★</b><span data-i18n="stat_rating">Average Rating</span></div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="stats">
-  <div class="stat"><div class="num">120+</div><div class="label" data-en="Projects delivered" data-pt="Projetos entregues">Projects delivered</div></div>
-  <div class="stat"><div class="num">4.9/5</div><div class="label" data-en="Average rating" data-pt="Avaliação média">Average rating</div></div>
-  <div class="stat"><div class="num">48h</div><div class="label" data-en="Typical turnaround" data-pt="Prazo típico">Typical turnaround</div></div>
-</div>
-
-<div class="container">
-  <section id="work">
-    <div class="section-title">
-      <p class="tag" data-en="Featured work" data-pt="Trabalho em destaque">Featured work</p>
-      <p class="hint" data-en="Long form" data-pt="Vídeos longos">Long form</p>
-    </div>
-    <div class="video-feature">
-      <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-      <span class="video-label" data-en="Brand campaign · 3:24" data-pt="Campanha de marca · 3:24">Brand campaign · 3:24</span>
-    </div>
-    <div class="grid-2">
-      <div class="thumb"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-      <div class="thumb"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-    </div>
-  </section>
-
-  <section>
-    <p class="tag" data-en="Shorts & reels" data-pt="Shorts e reels" style="margin-bottom:16px;">Shorts & reels</p>
-    <div class="grid-4">
-      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-      <div class="thumb vert"><div class="play-btn small"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-    </div>
-  </section>
-
-  <section id="reviews">
-    <p class="tag" data-en="What clients say" data-pt="O que os clientes dizem" style="margin-bottom:16px;">What clients say</p>
-    <div class="reviews-grid">
-      <div class="review-card">
-        <div class="stars">★★★★★</div>
-        <p class="quote" data-en="Turnaround was fast and the pacing matched our brand perfectly." data-pt="Entrega rápida e o ritmo combinou perfeitamente com nossa marca.">Turnaround was fast and the pacing matched our brand perfectly.</p>
-        <p class="author">— Marta, brand manager</p>
+<section id="long" class="wrap">
+  <div class="sec-head">
+    <div class="sec-tag" data-i18n="tag_long">// 01 — Long-Form</div>
+    <h2 data-i18n="head_long">Long-Form Videos</h2>
+    <p data-i18n="desc_long">YouTube, documentaries, vlogs, and brand content. Swap each card for the real link to your video.</p>
+  </div>
+  <div class="grid-long">
+    <div class="card">
+      <div class="thumb" id="thumb-podcast" style="background-image:url('https://img.youtube.com/vi/lYPhxE2wwvc/hqdefault.jpg'); background-size:cover; background-position:center;" onclick="playInline('thumb-podcast','lYPhxE2wwvc')">
+        <div class="play-btn"></div>
       </div>
-      <div class="review-card">
-        <div class="stars">★★★★★</div>
-        <p class="quote" data-en="Creative ideas we hadn't even considered, and great communication." data-pt="Ideias criativas que nem tínhamos pensado, e ótima comunicação.">Creative ideas we hadn't even considered, and great communication.</p>
-        <p class="author">— Diego, content creator</p>
+      <div class="card-actions">
+        <a href="https://youtu.be/lYPhxE2wwvc" target="_blank" rel="noopener" class="yt-link">YouTube ↗</a>
       </div>
     </div>
-  </section>
-
-  <section id="about">
-    <p class="tag" data-en="About" data-pt="Sobre" style="margin-bottom:16px;">About</p>
-    <div class="about-row">
-      <img src="https://i.imgur.com/k4WGAcz.jpg" alt="Samuel Carvalho" class="avatar-img">
-      <div class="about-text">
-        <p data-en="Hi, I'm Samuel Carvalho — a video editor based in Portugal, working with brands and creators worldwide." data-pt="Olá, sou Samuel Carvalho — editor de vídeo em Portugal, trabalhando com marcas e criadores no mundo todo.">Hi, I'm Samuel Carvalho — a video editor based in Portugal, working with brands and creators worldwide.</p>
-        <p data-en="I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll." data-pt="Foco em edições rápidas e limpas, com ritmo moderno — de narrativas longas a conteúdos curtos feitos para prender a atenção.">I focus on fast, clean edits with a modern pace — from long-form storytelling to short-form content built to stop the scroll.</p>
+    <div class="card">
+      <div class="thumb" id="thumb-gameplay" style="background-image:url('https://img.youtube.com/vi/YBqgNsxLwjU/hqdefault.jpg'); background-size:cover; background-position:center;" onclick="playInline('thumb-gameplay','YBqgNsxLwjU')">
+        <div class="play-btn"></div>
+      </div>
+      <div class="card-actions">
+        <a href="https://youtu.be/YBqgNsxLwjU" target="_blank" rel="noopener" class="yt-link">YouTube ↗</a>
       </div>
     </div>
-  </section>
-
-  <section id="pricing">
-    <p class="tag" data-en="Packages" data-pt="Pacotes" style="margin-bottom:16px;">Packages</p>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <h3 data-en="Short form" data-pt="Vídeo curto">Short form</h3>
-        <p class="plan-desc" data-en="Reels, shorts, TikTok" data-pt="Reels, shorts, TikTok">Reels, shorts, TikTok</p>
-        <p class="price">€30<span data-en="/video" data-pt="/vídeo">/video</span></p>
-        <ul>
-          <li data-en="Up to 60s" data-pt="Até 60s">Up to 60s</li>
-          <li data-en="Captions + sound design" data-pt="Legendas + design de som">Captions + sound design</li>
-          <li data-en="1 revision" data-pt="1 revisão">1 revision</li>
-        </ul>
-        <a href="#contact" class="btn-outline" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
-      </div>
-      <div class="price-card featured">
-        <span class="badge" data-en="Most popular" data-pt="Mais popular">Most popular</span>
-        <h3 data-en="Long form" data-pt="Vídeo longo">Long form</h3>
-        <p class="plan-desc" data-en="YouTube, campaigns" data-pt="YouTube, campanhas">YouTube, campaigns</p>
-        <p class="price">€120<span data-en="/video" data-pt="/vídeo">/video</span></p>
-        <ul>
-          <li data-en="Up to 10 min" data-pt="Até 10 min">Up to 10 min</li>
-          <li data-en="Color grading + motion graphics" data-pt="Correção de cor + motion graphics">Color grading + motion graphics</li>
-          <li data-en="2 revisions" data-pt="2 revisões">2 revisions</li>
-        </ul>
-        <a href="#contact" class="btn-primary" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
-      </div>
-      <div class="price-card">
-        <h3 data-en="Monthly retainer" data-pt="Pacote mensal">Monthly retainer</h3>
-        <p class="plan-desc" data-en="Ongoing content" data-pt="Conteúdo contínuo">Ongoing content</p>
-        <p class="price">€600<span data-en="/month" data-pt="/mês">/month</span></p>
-        <ul>
-          <li data-en="4 long + 8 short videos" data-pt="4 longos + 8 curtos">4 long + 8 short videos</li>
-          <li data-en="Priority turnaround" data-pt="Entrega prioritária">Priority turnaround</li>
-          <li data-en="Unlimited revisions" data-pt="Revisões ilimitadas">Unlimited revisions</li>
-        </ul>
-        <a href="#contact" class="btn-outline" data-en="Choose plan" data-pt="Escolher plano">Choose plan</a>
+    <div class="card">
+      <div class="thumb"><div class="play-btn"></div></div>
+      <div class="card-body">
+        <div class="card-tag" data-i18n="tag_c3">Coming Soon</div>
+        <h3 data-i18n="title_c3">Your Next Project</h3>
+        <p data-i18n="desc_c1c">Space reserved for your next long-form edit — send me the link to add it here.</p>
       </div>
     </div>
-  </section>
-</div>
+  </div>
+</section>
 
-<div class="cta" id="contact">
-  <h2 data-en="Ready to make your next video?" data-pt="Pronto para criar seu próximo vídeo?">Ready to make your next video?</h2>
-  <div class="btn-row">
-    <a href="https://wa.me/351962279674" class="contact-btn whatsapp" target="_blank">WhatsApp</a>
-    <a href="mailto:saasouzaplay@gmail.com" class="contact-btn email">Email</a>
+<section id="short" class="wrap">
+  <div class="sec-head">
+    <div class="sec-tag" data-i18n="tag_short">// 02 — Short-Form</div>
+    <h2 data-i18n="head_short">Short-Form Videos</h2>
+    <p data-i18n="desc_short">Reels, TikToks, and Shorts. Swipe to see more.</p>
+  </div>
+  <div class="shorts-row">
+    <div class="short-card"><div class="short-thumb"><span class="tag-pill">REEL</span><div class="play-btn"></div></div><div class="short-body"><h4 data-i18n="short1">Quick Cut 01</h4><span>0:32</span></div></div>
+    <div class="short-card"><div class="short-thumb"><span class="tag-pill">TIKTOK</span><div class="play-btn"></div></div><div class="short-body"><h4 data-i18n="short2">Quick Cut 02</h4><span>0:45</span></div></div>
+    <div class="short-card"><div class="short-thumb"><span class="tag-pill">SHORT</span><div class="play-btn"></div></div><div class="short-body"><h4 data-i18n="short3">Quick Cut 03</h4><span>0:28</span></div></div>
+    <div class="short-card"><div class="short-thumb"><span class="tag-pill">REEL</span><div class="play-btn"></div></div><div class="short-body"><h4 data-i18n="short4">Quick Cut 04</h4><span>0:39</span></div></div>
+    <div class="short-card"><div class="short-thumb"><span class="tag-pill">TIKTOK</span><div class="play-btn"></div></div><div class="short-body"><h4 data-i18n="short5">Quick Cut 05</h4><span>0:51</span></div></div>
+  </div>
+</section>
+
+<section id="pricing" class="wrap">
+  <div class="sec-head pricing-top">
+    <div>
+      <div class="sec-tag" data-i18n="tag_pricing">// 03 — Plans</div>
+      <h2 data-i18n="head_pricing">Pricing</h2>
+      <p data-i18n="desc_pricing">Pick a plan or ask for a custom quote. Switch currency anytime.</p>
+    </div>
+    <div class="currency-toggle">
+      <button id="cur-usd" onclick="setCurrency('usd')">$ USD</button>
+      <button id="cur-eur" onclick="setCurrency('eur')">€ EUR</button>
+    </div>
+  </div>
+  <div class="price-grid">
+    <div class="price-card">
+      <div class="price-name" data-i18n="plan1_name">Starter</div>
+      <div class="price-value"><span class="amount" id="price1">$150</span><span class="period" data-i18n="plan1_period">/ video</span></div>
+      <p class="price-desc" data-i18n="plan1_desc">Great for single short-form or social edits.</p>
+      <ul class="price-features">
+        <li data-i18n="plan1_f1">1 short-form video (up to 60s)</li>
+        <li data-i18n="plan1_f2">Color correction &amp; sound mix</li>
+        <li data-i18n="plan1_f3">2 rounds of revisions</li>
+        <li data-i18n="plan1_f4">48h turnaround</li>
+      </ul>
+      <a class="price-cta" href="https://wa.me/351962279674" target="_blank" rel="noopener" data-i18n="plan_cta">Get Started</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge" data-i18n="plan2_badge">Most Popular</div>
+      <div class="price-name" data-i18n="plan2_name">Creator</div>
+      <div class="price-value"><span class="amount" id="price2">$450</span><span class="period" data-i18n="plan2_period">/ month</span></div>
+      <p class="price-desc" data-i18n="plan2_desc">For podcasters &amp; creators posting weekly.</p>
+      <ul class="price-features">
+        <li data-i18n="plan2_f1">1 long-form video + 4 short clips</li>
+        <li data-i18n="plan2_f2">Color grade, sound design &amp; captions</li>
+        <li data-i18n="plan2_f3">Unlimited revisions</li>
+        <li data-i18n="plan2_f4">Priority 24–48h turnaround</li>
+      </ul>
+      <a class="price-cta" href="https://wa.me/351962279674" target="_blank" rel="noopener" data-i18n="plan_cta">Get Started</a>
+    </div>
+    <div class="price-card">
+      <div class="price-name" data-i18n="plan3_name">Studio</div>
+      <div class="price-value"><span class="amount" id="price3">$900</span><span class="period" data-i18n="plan3_period">/ month</span></div>
+      <p class="price-desc" data-i18n="plan3_desc">Full channel management for brands &amp; teams.</p>
+      <ul class="price-features">
+        <li data-i18n="plan3_f1">2+ long-form videos + 8 short clips</li>
+        <li data-i18n="plan3_f2">Thumbnails &amp; motion graphics</li>
+        <li data-i18n="plan3_f3">Dedicated editor &amp; strategy call</li>
+        <li data-i18n="plan3_f4">Same-day priority support</li>
+      </ul>
+      <a class="price-cta" href="https://wa.me/351962279674" target="_blank" rel="noopener" data-i18n="plan_cta">Get Started</a>
+    </div>
+  </div>
+  <p class="price-note" data-i18n="price_note">Sample pricing — adjust to match your real rates. Custom projects quoted individually.</p>
+</section>
+
+<section id="reviews" class="wrap">
+  <div class="sec-head">
+    <div class="sec-tag" data-i18n="tag_reviews">// 04 — Trust</div>
+    <h2 data-i18n="head_reviews">What Clients Say</h2>
+    <p data-i18n="desc_reviews">Layout examples — replace with real reviews from your clients.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="quote" data-i18n="quote1">Example: "Delivered ahead of schedule and the pacing was perfect for our audience."</p>
+      <div class="testi-who"><div class="avatar">JP</div><div><b data-i18n="name1">Client Name</b><span data-i18n="role1">Content Creator</span></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="quote" data-i18n="quote2">Example: "Easy to communicate with and a professional result. He's our go-to editor now."</p>
+      <div class="testi-who"><div class="avatar">AM</div><div><b data-i18n="name2">Client Name</b><span data-i18n="role2">Brand / Company</span></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="quote" data-i18n="quote3">Example: "The Reels he edited tripled our reach in two weeks."</p>
+      <div class="testi-who"><div class="avatar">RS</div><div><b data-i18n="name3">Client Name</b><span data-i18n="role3">Social Media</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="contact-panel">
+    <h2 data-i18n="contact_head">Let's Edit Your Next Video</h2>
+    <p data-i18n="contact_desc">Send over your project or just say hi — I reply fast on WhatsApp or email.</p>
+    <div class="contact-ctas">
+      <a class="btn btn-whats" href="https://wa.me/351962279674" target="_blank" rel="noopener">WhatsApp · +351 962 279 674</a>
+      <a class="btn btn-mail" href="mailto:saasouzaplay@gmail.com">Email · saasouzaplay@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">SMK<span style="color:var(--blue);">.</span>STUDIO</div>
+  <span data-i18n="footer_text">© 2026 SMK Studio — Video Editing</span>
+</footer>
+
+<div class="timeline-hud">
+  <span class="tc mono" id="tc">00:00:00:00</span>
+  <div class="track" id="track">
+    <div class="clip c1" data-id="hero" style="width:12%" data-i18n="clip_intro">INTRO</div>
+    <div class="clip c2" data-id="long" style="width:20%" data-i18n="clip_long">LONG</div>
+    <div class="clip c3" data-id="short" style="width:16%" data-i18n="clip_short">SHORT</div>
+    <div class="clip c4" data-id="pricing" style="width:18%" data-i18n="clip_pricing">PRICING</div>
+    <div class="clip c5" data-id="reviews" style="width:17%" data-i18n="clip_reviews">REVIEWS</div>
+    <div class="clip c1" data-id="contact" style="width:17%" data-i18n="clip_contact">CONTACT</div>
+    <div class="playhead" id="playhead"></div>
   </div>
 </div>
-
-<footer>© 2026 SMK Studio. All rights reserved.</footer>
 
 <script>
-  const langBtn = document.getElementById('langBtn');
-  let isPt = false;
-  langBtn.addEventListener('click', () => {
-    isPt = !isPt;
-    document.documentElement.setAttribute('data-lang', isPt ? 'pt' : 'en');
-    langBtn.textContent = isPt ? 'EN' : 'PT';
-    document.querySelectorAll('[data-en][data-pt]').forEach(el => {
-      el.textContent = isPt ? el.getAttribute('data-pt') : el.getAttribute('data-en');
+  const translations = {
+    en: {
+      nav_long:"Long-Form", nav_short:"Short-Form", nav_reviews:"Reviews", nav_contact:"Contact",
+      eyebrow:"AVAILABLE FOR NEW PROJECTS",
+      hero_p:"Video editing for YouTube, social media, and brand campaigns. From long-form to fast vertical cuts — pacing, color, and sound tuned to keep viewers until the last frame.",
+      btn_view_work:"View Work", btn_message:"Message Me",
+      stat_videos:"Videos Edited", stat_clients:"Clients", stat_rating:"Average Rating",
+      tag_long:"// 01 — Long-Form", head_long:"Long-Form Videos",
+      desc_long:"YouTube, documentaries, vlogs, and brand content. Swap each card for the real link to your video.",
+      tag_c1:"YouTube · Podcast", title_c1:"Podcast Episode",
+      tag_c2:"YouTube · Gameplay", title_c2:"Gameplay Highlights",
+      tag_c3:"Coming Soon", title_c3:"Your Next Project",
+      desc_c1:"Full episode edit — pacing, sound design and color for a long-form conversation.",
+      desc_c1b:"Gameplay edit with pacing, sound design and highlight cuts.",
+      desc_c1c:"Space reserved for your next long-form edit — send me the link to add it here.",
+      tag_short:"// 02 — Short-Form", head_short:"Short-Form Videos",
+      desc_short:"Reels, TikToks, and Shorts. Swipe to see more.",
+      short1:"Quick Cut 01", short2:"Quick Cut 02", short3:"Quick Cut 03", short4:"Quick Cut 04", short5:"Quick Cut 05",
+      nav_pricing:"Pricing",
+      tag_pricing:"// 03 — Plans", head_pricing:"Pricing",
+      desc_pricing:"Pick a plan or ask for a custom quote. Switch currency anytime.",
+      plan1_name:"Starter", plan1_period:"/ video",
+      plan1_desc:"Great for single short-form or social edits.",
+      plan1_f1:"1 short-form video (up to 60s)", plan1_f2:"Color correction & sound mix",
+      plan1_f3:"2 rounds of revisions", plan1_f4:"48h turnaround",
+      plan2_badge:"Most Popular", plan2_name:"Creator", plan2_period:"/ month",
+      plan2_desc:"For podcasters & creators posting weekly.",
+      plan2_f1:"1 long-form video + 4 short clips", plan2_f2:"Color grade, sound design & captions",
+      plan2_f3:"Unlimited revisions", plan2_f4:"Priority 24–48h turnaround",
+      plan3_name:"Studio", plan3_period:"/ month",
+      plan3_desc:"Full channel management for brands & teams.",
+      plan3_f1:"2+ long-form videos + 8 short clips", plan3_f2:"Thumbnails & motion graphics",
+      plan3_f3:"Dedicated editor & strategy call", plan3_f4:"Same-day priority support",
+      plan_cta:"Get Started",
+      price_note:"Sample pricing — adjust to match your real rates. Custom projects quoted individually.",
+      clip_pricing:"PRICING",
+      tag_reviews:"// 04 — Trust", head_reviews:"What Clients Say",
+      desc_reviews:"Layout examples — replace with real reviews from your clients.",
+      quote1:'Example: "Delivered ahead of schedule and the pacing was perfect for our audience."',
+      quote2:"Example: \"Easy to communicate with and a professional result. He's our go-to editor now.\"",
+      quote3:'Example: "The Reels he edited tripled our reach in two weeks."',
+      name1:"Client Name", role1:"Content Creator",
+      name2:"Client Name", role2:"Brand / Company",
+      name3:"Client Name", role3:"Social Media",
+      contact_head:"Let's Edit Your Next Video",
+      contact_desc:"Send over your project or just say hi — I reply fast on WhatsApp or email.",
+      footer_text:"© 2026 SMK Studio — Video Editing",
+      clip_intro:"INTRO", clip_long:"LONG", clip_short:"SHORT", clip_reviews:"REVIEWS", clip_contact:"CONTACT",
+      hero_h1:'CUTS THAT <span class="glow-blue">HOOK</span>.<br>STORIES THAT <span class="glow-purple">STAY</span>.'
+    },
+    pt: {
+      nav_long:"Longos", nav_short:"Curtos", nav_reviews:"Depoimentos", nav_contact:"Contacto",
+      eyebrow:"DISPONÍVEL PARA NOVOS PROJETOS",
+      hero_p:"Edição de vídeo para YouTube, redes sociais e campanhas de marca. Do longo-formato ao vertical rápido — ritmo, cor e som ao nível certo para reter até ao fim.",
+      btn_view_work:"Ver Trabalhos", btn_message:"Falar Agora",
+      stat_videos:"Vídeos Editados", stat_clients:"Clientes", stat_rating:"Avaliação Média",
+      tag_long:"// 01 — Formato Longo", head_long:"Vídeos Longos",
+      desc_long:"YouTube, documentários, vlogs e conteúdo de marca. Substitui cada card pelo link real do teu vídeo.",
+      tag_c1:"YouTube · Podcast", title_c1:"Episódio de Podcast",
+      tag_c2:"YouTube · Gameplay", title_c2:"Melhores Momentos de Gameplay",
+      tag_c3:"Em Breve", title_c3:"O Teu Próximo Projeto",
+      desc_c1:"Edição do episódio completo — ritmo, som e cor para uma conversa longa.",
+      desc_c1b:"Edição de gameplay com ritmo, som e cortes de destaque.",
+      desc_c1c:"Espaço reservado para o teu próximo vídeo longo — envia-me o link para o adicionar aqui.",
+      tag_short:"// 02 — Formato Curto", head_short:"Vídeos Curtos",
+      desc_short:"Reels, TikToks e Shorts. Arrasta para o lado para ver mais.",
+      short1:"Corte Rápido 01", short2:"Corte Rápido 02", short3:"Corte Rápido 03", short4:"Corte Rápido 04", short5:"Corte Rápido 05",
+      nav_pricing:"Preços",
+      tag_pricing:"// 03 — Planos", head_pricing:"Preços",
+      desc_pricing:"Escolhe um plano ou pede um orçamento personalizado. Troca a moeda quando quiseres.",
+      plan1_name:"Inicial", plan1_period:"/ vídeo",
+      plan1_desc:"Ideal para uma edição avulsa de conteúdo curto ou redes sociais.",
+      plan1_f1:"1 vídeo curto (até 60s)", plan1_f2:"Correção de cor e mix de som",
+      plan1_f3:"2 rondas de revisão", plan1_f4:"Entrega em 48h",
+      plan2_badge:"Mais Popular", plan2_name:"Criador", plan2_period:"/ mês",
+      plan2_desc:"Para podcasters e criadores que publicam semanalmente.",
+      plan2_f1:"1 vídeo longo + 4 cortes curtos", plan2_f2:"Grading de cor, design de som e legendas",
+      plan2_f3:"Revisões ilimitadas", plan2_f4:"Prioridade, entrega em 24–48h",
+      plan3_name:"Estúdio", plan3_period:"/ mês",
+      plan3_desc:"Gestão completa de canal para marcas e equipas.",
+      plan3_f1:"2+ vídeos longos + 8 cortes curtos", plan3_f2:"Thumbnails e motion graphics",
+      plan3_f3:"Editor dedicado e chamada de estratégia", plan3_f4:"Suporte prioritário no mesmo dia",
+      plan_cta:"Começar Agora",
+      price_note:"Preços de exemplo — ajusta aos teus valores reais. Projetos personalizados são orçados individualmente.",
+      clip_pricing:"PREÇOS",
+      tag_reviews:"// 04 — Confiança", head_reviews:"O Que Dizem os Clientes",
+      desc_reviews:"Exemplos de layout — troca pelos depoimentos reais dos teus clientes.",
+      quote1:'Exemplo: "Entregou antes do prazo e o ritmo do vídeo ficou perfeito para o nosso público."',
+      quote2:'Exemplo: "Comunicação fácil e resultado profissional. Já é o nosso editor fixo."',
+      quote3:'Exemplo: "Os Reels que ele editou triplicaram o nosso alcance em duas semanas."',
+      name1:"Nome do Cliente", role1:"Criador de Conteúdo",
+      name2:"Nome do Cliente", role2:"Marca / Empresa",
+      name3:"Nome do Cliente", role3:"Social Media",
+      contact_head:"Vamos Editar o Teu Próximo Vídeo?",
+      contact_desc:"Envia o teu projeto ou apenas diz olá — respondo rápido por WhatsApp ou email.",
+      footer_text:"© 2026 SMK Studio — Edição de Vídeo",
+      clip_intro:"INTRO", clip_long:"LONGOS", clip_short:"CURTOS", clip_reviews:"DEPOIM.", clip_contact:"CONTACTO",
+      hero_h1:'CORTES QUE <span class="glow-blue">PRENDEM</span>.<br>HISTÓRIAS QUE <span class="glow-purple">FICAM</span>.'
+    }
+  };
+
+  // Sample prices per plan — edit to match your real rates.
+  const prices = {
+    plan1: { usd: 150, eur: 140 },
+    plan2: { usd: 450, eur: 420 },
+    plan3: { usd: 900, eur: 840 }
+  };
+  let currentCurrency = 'usd';
+
+  function updatePrices(){
+    const symbol = currentCurrency === 'usd' ? '$' : '€';
+    document.getElementById('price1').textContent = symbol + prices.plan1[currentCurrency];
+    document.getElementById('price2').textContent = symbol + prices.plan2[currentCurrency];
+    document.getElementById('price3').textContent = symbol + prices.plan3[currentCurrency];
+    document.getElementById('cur-usd').classList.toggle('active', currentCurrency === 'usd');
+    document.getElementById('cur-eur').classList.toggle('active', currentCurrency === 'eur');
+  }
+
+  function setCurrency(cur){
+    currentCurrency = cur;
+    updatePrices();
+  }
+
+  function setLang(lang){
+    const dict = translations[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if(dict[key] !== undefined) el.textContent = dict[key];
     });
-  });
+    document.getElementById('hero-h1').innerHTML = dict.hero_h1;
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.documentElement.lang = lang;
+    // Default currency follows language: EN -> USD, PT -> EUR.
+    // The visitor can still override manually with the $/€ toggle in Pricing.
+    currentCurrency = (lang === 'pt') ? 'eur' : 'usd';
+    updatePrices();
+  }
+
+  function playInline(thumbId, videoId){
+    const el = document.getElementById(thumbId);
+    el.innerHTML = '<iframe src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;"></iframe>';
+    el.style.cursor = 'default';
+    el.onclick = null;
+  }
+
+  const sections = ['hero','long','short','pricing','reviews','contact'];
+  const clips = document.querySelectorAll('.clip');
+  const playhead = document.getElementById('playhead');
+  const tc = document.getElementById('tc');
+
+  function fmtTC(pct){
+    const totalFrames = (2*60+30)*24;
+    const f = Math.floor(pct/100 * totalFrames);
+    const frames = f % 24;
+    const totalSec = Math.floor(f/24);
+    const sec = totalSec % 60;
+    const min = Math.floor(totalSec/60) % 60;
+    const hh = Math.floor(totalSec/3600);
+    const p = n => String(n).padStart(2,'0');
+    return `${p(hh)}:${p(min)}:${p(sec)}:${p(frames)}`;
+  }
+
+  function onScroll(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollH = doc.scrollHeight - doc.clientHeight;
+    const pct = scrollH > 0 ? (scrollTop/scrollH)*100 : 0;
+    playhead.style.left = pct + '%';
+    tc.textContent = fmtTC(pct);
+    let current = 'hero';
+    for(const id of sections){
+      const el = document.getElementById(id);
+      if(el){
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight*0.5) current = id;
+      }
+    }
+    clips.forEach(c => c.classList.toggle('active', c.dataset.id === current));
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('load', () => { setLang('en'); onScroll(); });
 </script>
 </body>
 </html>
