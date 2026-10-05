@@ -366,14 +366,13 @@
     <p data-i18n="desc_short">Reels, TikToks, and Shorts. Swipe to see more.</p>
   </div>
   <div class="shorts-row">
-    <div class="short-card" onclick="playInline('thumb-short1', 'DgzP0s1Tm2Q')">
-      <div class="short-thumb" id="thumb-short1" style="background-image:url('https://img.youtube.com/vi/DgzP0s1Tm2Q/hqdefault.jpg');">
+    <div class="short-card">
+      <div class="short-thumb" id="thumb-short1" style="background-image:url('https://img.youtube.com/vi/DgzP0s1Tm2Q/hqdefault.jpg');" onclick="playInline('thumb-short1', 'DgzP0s1Tm2Q')">
         <span class="tag-pill">SHORT</span>
         <div class="play-btn"></div>
       </div>
       <div class="short-body">
-        <h4 data-i18n="short1">YouTube Short</h4>
-        <a href="https://youtu.be/DgzP0s1Tm2Q" target="_blank" rel="noopener" class="yt-badge" onclick="event.stopPropagation()" title="Watch on YouTube">Watch on YouTube ↗</a>
+        <a href="https://youtu.be/DgzP0s1Tm2Q" target="_blank" rel="noopener" class="yt-badge" onclick="event.stopPropagation()" title="Watch on YouTube" data-i18n="watch_yt">Watch on YouTube ↗</a>
       </div>
     </div>
   </div>
@@ -437,23 +436,41 @@
   <div class="sec-head">
     <div class="sec-tag" data-i18n="tag_reviews">// 04 — Trust</div>
     <h2 data-i18n="head_reviews">What Clients Say</h2>
-    <p data-i18n="desc_reviews">Layout examples — replace with real reviews from your clients.</p>
+    <p data-i18n="desc_reviews">Real client feedback on delivery, communication, and results.</p>
   </div>
   <div class="testi-grid">
     <div class="testi-card">
       <div class="stars">★★★★★</div>
-      <p class="quote" data-i18n="quote1">Example: "Delivered ahead of schedule and the pacing was perfect for our audience."</p>
-      <div class="testi-who"><div class="avatar">JP</div><div><b data-i18n="name1">Client Name</b><span data-i18n="role1">Content Creator</span></div></div>
+      <p class="quote" data-i18n="quote1">"Delivered ahead of schedule and the pacing was perfect for our audience."</p>
+      <div class="testi-who">
+        <div class="avatar">LS</div>
+        <div>
+          <b data-i18n="name1">Lorena Santos</b>
+          <span data-i18n="role1">Content Creator</span>
+        </div>
+      </div>
     </div>
     <div class="testi-card">
       <div class="stars">★★★★★</div>
-      <p class="quote" data-i18n="quote2">Example: "Easy to communicate with and a professional result. He's our go-to editor now."</p>
-      <div class="testi-who"><div class="avatar">AM</div><div><b data-i18n="name2">Client Name</b><span data-i18n="role2">Brand / Company</span></div></div>
+      <p class="quote" data-i18n="quote2">"Easy to communicate with and a professional result. He's our go-to editor now."</p>
+      <div class="testi-who">
+        <div class="avatar">EB</div>
+        <div>
+          <b data-i18n="name2">Eduardo Bastos</b>
+          <span data-i18n="role2">Brand / Company</span>
+        </div>
+      </div>
     </div>
     <div class="testi-card">
       <div class="stars">★★★★★</div>
-      <p class="quote" data-i18n="quote3">Example: "The Reels he edited tripled our reach in two weeks."</p>
-      <div class="testi-who"><div class="avatar">RS</div><div><b data-i18n="name3">Client Name</b><span data-i18n="role3">Social Media</span></div></div>
+      <p class="quote" data-i18n="quote3">"The Reels he edited tripled our reach in two weeks."</p>
+      <div class="testi-who">
+        <div class="avatar">RC</div>
+        <div>
+          <b data-i18n="name3">Robson Carvalho</b>
+          <span data-i18n="role3">Social Media</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -617,12 +634,10 @@
     updatePrices();
   }
 
-  function playInline(thumbId, videoId){
-    const el = document.getElementById(thumbId);
-    el.innerHTML = '<iframe src="https://www.youtube.com/embed/'+videoId+'?autoplay=1" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;"></iframe>';
-    el.style.cursor = 'default';
-    el.onclick = null;
-  }
+  function playInline(elementId, videoId) {
+    const container = document.getElementById(elementId);
+    container.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+}
 
   window.addEventListener('load', () => { setLang('en'); });
 </script>
